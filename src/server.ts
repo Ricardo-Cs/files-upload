@@ -1,11 +1,8 @@
 import express, { Request, Response, ErrorRequestHandler } from 'express';
 import path from 'path';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import { MulterError } from 'multer';
 import apiRoutes from './routes/api';
-
-dotenv.config();
 
 const server = express();
 
@@ -34,6 +31,6 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 }
 server.use(errorHandler);
 
-server.listen(process.env.PORT, () => {
-    console.log(`Servidor rodando na porta ${process.env.PORT}`);
+server.listen(4000, () => {
+    console.log(`Servidor rodando na porta 4000`);
 });

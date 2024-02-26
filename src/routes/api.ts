@@ -27,11 +27,6 @@ const upload = multer({
     limits: { fieldSize: 2000000 } // Em bytes
 });
 
-router.post('/register', ApiController.register);
-router.post('/login', ApiController.login);
-
-router.get('/list', ApiController.list);
-
 // Upload de arquivo
 router.post('/uploadSingle', upload.single('avatar'), ApiController.uploadSingle);
 router.post('/uploadArray', upload.array('avatars', 10), ApiController.uploadArray); // Segundo parâmetro de upload.array é opcional. 
