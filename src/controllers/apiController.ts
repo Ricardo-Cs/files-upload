@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { User } from '../models/User';
+import sharp from 'sharp';
 
 export const ping = (req: Request, res: Response) => {
     res.json({ pong: true });
@@ -53,8 +54,21 @@ export const list = async (req: Request, res: Response) => {
 }
 
 export const uploadSingle = async (req: Request, res: Response) => {
-    console.log('Arquivo: ', req.file);
-    res.json('Sucesso');
+    if (req.file) {
+        await sharp(req.file.path)
+            .resize(300, 300)
+            .toFormat('jpeg')
+            .toFile(`./public/media/${req.file.filename}.jpg`);
+
+        res.json({ image: `${req.file.filename}.jpg` });
+    } else {
+        res.status(400);
+        res.json({ error: 'Arquivo inválido' })
+    }
+
+
+    // console.log('Arquivo: ', req.file);
+    // res.json('Sucesso');
 }
 
 export const uploadArray = async (req: Request, res: Response) => {
