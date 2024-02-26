@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { User } from '../models/User';
 import sharp from 'sharp';
+import { unlink } from 'fs/promises';
 
 export const ping = (req: Request, res: Response) => {
     res.json({ pong: true });
@@ -55,12 +56,15 @@ export const list = async (req: Request, res: Response) => {
 
 export const uploadSingle = async (req: Request, res: Response) => {
     if (req.file) {
+        const filename: string = `${req.file.filename}.jpg`
         await sharp(req.file.path)
             .resize(300, 300)
             .toFormat('jpeg')
-            .toFile(`./public/media/${req.file.filename}.jpg`);
+            .toFile(`./public/media/${filename}`);
 
-        res.json({ image: `${req.file.filename}.jpg` });
+        await unlink(req.file.path);
+
+        res.json({ image: filename });
     } else {
         res.status(400);
         res.json({ error: 'Arquivo inválido' })
